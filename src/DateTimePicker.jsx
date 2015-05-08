@@ -83,8 +83,9 @@ DateTimePicker = React.createClass({
     }
   },
   render: function() {
+    var onMouseDown = function(e) {e.preventDefault()};
     return (
-      <div className={React.addons.classSet(this.props.widgetClasses)} style={this.props.widgetStyle}>
+      <div className={React.addons.classSet(this.props.widgetClasses)} style={this.props.widgetStyle} onMouseDown={onMouseDown}>
 
         <ul className="list-unstyled">
 
