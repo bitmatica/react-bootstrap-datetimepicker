@@ -78,7 +78,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    format: React.PropTypes.string,
 	    inputFormat: React.PropTypes.string,
 	    inputProps: React.PropTypes.object,
-	    defaultText: React.PropTypes.string,
 	    minDate: React.PropTypes.object,
 	    maxDate: React.PropTypes.object
 	  },
@@ -96,6 +95,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	  },
 	  getInitialState: function() {
+	    var date = moment(this.props.dateTime, this.props.format),
+	        inputText = date.format(this.props.inputFormat);
+	    if (!date.isValid()) {
+	      date = moment();
+	      inputText = '';
+	    }
 	    return {
 	      showDatePicker: true,
 	      showTimePicker: false,
@@ -105,9 +110,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: -9999,
 	        zIndex: '9999 !important'
 	      },
-	      viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month"),
-	      selectedDate: moment(this.props.dateTime, this.props.format, true),
-	      inputValue: typeof this.props.defaultText != 'undefined' ?  this.props.defaultText : moment(this.props.dateTime, this.props.format, true).format(this.props.inputFormat)
+	      viewDate: date.clone().startOf("month"),
+	      selectedDate: date,
+	      inputValue: inputText
 	    };
 	  },
 	  componentWillReceiveProps: function(nextProps) {
