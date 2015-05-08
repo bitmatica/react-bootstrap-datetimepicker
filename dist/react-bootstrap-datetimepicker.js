@@ -363,8 +363,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  togglePeriod: this.togglePeriod}
 	            ), 
 	            React.createElement("div", {className: "input-group date", ref: "datetimepicker"}, 
-	              React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue, ref: "dtpinput"},  this.props.inputProps)), 
-	              React.createElement("span", {className: "input-group-addon", onClick: this.onClick, onBlur: this.onBlur, ref: "dtpbutton"}, React.createElement(Glyphicon, {glyph: "calendar"}))
+	              React.createElement("span", {className: "input-group-addon", onClick: this.onClick, onBlur: this.onBlur, ref: "dtpbutton"}, React.createElement(Glyphicon, {glyph: "calendar"})), 
+	              React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue, ref: "dtpinput"},  this.props.inputProps))
 	            )
 	          )
 	    );

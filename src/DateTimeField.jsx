@@ -300,8 +300,8 @@ DateTimeField = React.createClass({
                   togglePeriod={this.togglePeriod}
             />
             <div className="input-group date" ref="datetimepicker">
-              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>
               <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} ref="dtpbutton"><Glyphicon glyph="calendar" /></span>
+              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>
             </div>
           </div>
     );
