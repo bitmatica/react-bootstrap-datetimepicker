@@ -301,6 +301,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: 'auto',
 	        right: 40
 	      };
+
+	      // Focus the input and place the cursor at the end
+	      var dtpinput = this.refs.dtpinput.getDOMNode();
+	      dtpinput.focus();
+	      var len = dtpinput.value.length; 
+	      dtpinput.setSelectionRange(len, len);
+
 	      return this.setState({
 	        widgetStyle: styles,
 	        widgetClasses: classes
@@ -351,7 +358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  togglePeriod: this.togglePeriod}
 	            ), 
 	            React.createElement("div", {className: "input-group date", ref: "datetimepicker"}, 
-	              React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue},  this.props.inputProps)), 
+	              React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue, ref: "dtpinput"},  this.props.inputProps)), 
 	              React.createElement("span", {className: "input-group-addon", onClick: this.onClick, onBlur: this.onBlur, ref: "dtpbutton"}, React.createElement(Glyphicon, {glyph: "calendar"}))
 	            )
 	          )

@@ -238,6 +238,13 @@ DateTimeField = React.createClass({
         left: 'auto',
         right: 40
       };
+
+      // Focus the input and place the cursor at the end
+      var dtpinput = this.refs.dtpinput.getDOMNode();
+      dtpinput.focus();
+      var len = dtpinput.value.length; 
+      dtpinput.setSelectionRange(len, len);
+
       return this.setState({
         widgetStyle: styles,
         widgetClasses: classes
@@ -288,7 +295,7 @@ DateTimeField = React.createClass({
                   togglePeriod={this.togglePeriod}
             />
             <div className="input-group date" ref="datetimepicker">
-              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} {...this.props.inputProps}/>
+              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>
               <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} ref="dtpbutton"><Glyphicon glyph="calendar" /></span>
             </div>
           </div>
