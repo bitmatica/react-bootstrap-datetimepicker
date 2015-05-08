@@ -77,7 +77,7 @@ DateTimeField = React.createClass({
       return this.setState({
         selectedDate: this.state.viewDate.clone().date(parseInt(e.target.innerHTML)).hour(this.state.selectedDate.hours()).minute(this.state.selectedDate.minutes())
       }, function () {
-        this.closePicker();
+        //this.closePicker();
         this.props.onChange(this.state.selectedDate.format(this.props.format));
         return this.setState({
           inputValue: this.state.selectedDate.format(this.props.inputFormat)
@@ -89,7 +89,7 @@ DateTimeField = React.createClass({
     return this.setState({
       selectedDate: this.state.selectedDate.clone().hour(parseInt(e.target.innerHTML)).minute(this.state.selectedDate.minutes())
     }, function() {
-      this.closePicker();
+      //this.closePicker();
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
         inputValue: this.state.selectedDate.format(this.props.inputFormat)
@@ -100,7 +100,7 @@ DateTimeField = React.createClass({
     return this.setState({
       selectedDate: this.state.selectedDate.clone().hour(this.state.selectedDate.hours()).minute(parseInt(e.target.innerHTML))
     }, function() {
-      this.closePicker();
+      //this.closePicker();
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
         inputValue: this.state.selectedDate.format(this.props.inputFormat)
