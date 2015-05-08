@@ -317,26 +317,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      widgetStyle: style
 	    });
 	  },
-	  renderOverlay: function() {
-	    var styles;
-	    styles = {
-	      position: 'fixed',
-	      top: 0,
-	      bottom: 0,
-	      left: 0,
-	      right: 0,
-	      zIndex: '999'
-	    };
-	    if (this.state.showPicker) {
-	      return (React.createElement("div", {style: styles, onClick: this.closePicker}));
-	    } else {
-	      return React.createElement("span", null);
-	    }
-	  },
 	  render: function() {
 	    return (
 	          React.createElement("div", null, 
-	            this.renderOverlay(), 
 	            React.createElement(DateTimePicker, {ref: "widget", 
 	                  widgetClasses: this.state.widgetClasses, 
 	                  widgetStyle: this.state.widgetStyle, 

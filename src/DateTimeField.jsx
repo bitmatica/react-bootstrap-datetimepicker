@@ -254,26 +254,9 @@ DateTimeField = React.createClass({
       widgetStyle: style
     });
   },
-  renderOverlay: function() {
-    var styles;
-    styles = {
-      position: 'fixed',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: '999'
-    };
-    if (this.state.showPicker) {
-      return (<div style={styles} onClick={this.closePicker} />);
-    } else {
-      return <span />;
-    }
-  },
   render: function() {
     return (
           <div>
-            {this.renderOverlay()}
             <DateTimePicker ref="widget"
                   widgetClasses={this.state.widgetClasses}
                   widgetStyle={this.state.widgetStyle}
