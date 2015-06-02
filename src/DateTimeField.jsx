@@ -262,11 +262,6 @@ DateTimeField = React.createClass({
     style['left'] = -9999;
     style['display'] = 'none';
 
-    // Blur the input
-
-    var dtpinput = this.refs.dtpinput.getDOMNode();
-    dtpinput.blur();
-
     return this.setState({
       showPicker: false,
       widgetStyle: style
