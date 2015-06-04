@@ -1,14 +1,29 @@
 var DateTimePickerHours, React;
 
 React = require('react');
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var Constants = require('./Constants');
 
 DateTimePickerHours = React.createClass({
   propTypes: {
-    setSelectedHour: React.PropTypes.func.isRequired
+    setSelectedHour: React.PropTypes.func.isRequired,
+    onSwitch: React.PropTypes.func.isRequired
+  },
+  renderSwitchButton: function() {
+    return this.props.mode === Constants.MODE_TIME ?
+        (
+            <ul className="list-unstyled">
+              <li>
+                <span className="btn picker-switch" style={{width:'100%'}} onClick={this.props.onSwitch}><Glyphicon glyph="time" /></span>
+              </li>
+            </ul>
+        ) :
+        null;
   },
   render: function() {
     return (
       <div className="timepicker-hours" data-action="selectHour" style={{display: 'block'}}>
+        {this.renderSwitchButton()}
         <table className="table-condensed">
           <tbody>
             <tr>

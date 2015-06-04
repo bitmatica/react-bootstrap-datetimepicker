@@ -6,15 +6,19 @@ DateTimePicker = require('./DateTimePicker');
 
 moment = require('moment');
 
-Glyphicon = require('react-bootstrap').Glyphicon;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+
+var Constants = require('./Constants');
 
 DateTimeField = React.createClass({
   propTypes: {
     dateTime: React.PropTypes.string,
     onChange: React.PropTypes.func,
     format: React.PropTypes.string,
-    inputFormat: React.PropTypes.string,
     inputProps: React.PropTypes.object,
+    inputFormat: React.PropTypes.string,
+    defaultText: React.PropTypes.string,
+    mode: React.PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME]),
     minDate: React.PropTypes.object,
     maxDate: React.PropTypes.object
   },
@@ -22,10 +26,10 @@ DateTimeField = React.createClass({
     return {
       dateTime: moment().format('x'),
       format: 'x',
-      inputFormat: "MM/DD/YY h:mm A",
       showToday: true,
       viewMode: 'days',
       daysOfWeekDisabled: [],
+      mode: Constants.MODE_DATETIME,
       onChange: function (x) {
         console.log(x);
       }
@@ -39,17 +43,19 @@ DateTimeField = React.createClass({
       inputText = '';
     }
     return {
-      showDatePicker: true,
-      showTimePicker: false,
+      showDatePicker: this.props.mode !== Constants.MODE_TIME,
+      showTimePicker: this.props.mode === Constants.MODE_TIME,
+      inputFormat: this.resolvePropsInputFormat(),
+      buttonIcon: this.props.mode === Constants.MODE_TIME ? "time" : "calendar",
       widgetStyle: {
         display: 'block',
         position: 'absolute',
         left: -9999,
         zIndex: '9999 !important'
       },
-      viewDate: date.clone().startOf("month"),
-      selectedDate: date,
-      inputValue: inputText
+      viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month"),
+      selectedDate: moment(this.props.dateTime, this.props.format, true),
+      inputValue: typeof this.props.defaultText != 'undefined' ?  this.props.defaultText : moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
     };
   },
   componentWillReceiveProps: function(nextProps) {
@@ -60,32 +66,53 @@ DateTimeField = React.createClass({
         inputValue: moment(nextProps.dateTime, nextProps.format, true).format(nextProps.inputFormat)
       });
     }
+    if (nextProps.inputFormat !== this.props.inputFormat) {
+      return this.setState({
+        inputFormat: nextProps.inputFormat
+      });
+    }
+  },
+  resolvePropsInputFormat: function() {
+    if(this.props.inputFormat) return this.props.inputFormat;
+    switch(this.props.mode) {
+      case Constants.MODE_TIME:
+        return "h:mm A";
+      case Constants.MODE_DATE:
+        return "MM/DD/YY";
+      default:
+        return "MM/DD/YY h:mm A";
+    }
   },
   onChange: function(event) {
     var value = event.target == null ? event : event.target.value;
-    if (moment(value, this.props.inputFormat, true).isValid()) {
+    if (moment(value, this.state.inputFormat, true).isValid()) {
       this.setState({
-        selectedDate: moment(value, this.props.inputFormat, true),
-        viewDate: moment(value, this.props.inputFormat, true).startOf("month")
+        selectedDate: moment(value, this.state.inputFormat, true),
+        viewDate: moment(value, this.state.inputFormat, true).startOf("month")
       });
     }
 
     return this.setState({
       inputValue: value
     }, function() {
-      return this.props.onChange(moment(this.state.inputValue, this.props.inputFormat, true).format(this.props.format));
+      return this.props.onChange(moment(this.state.inputValue, this.state.inputFormat, true).format(this.props.format));
     });
 
   },
   setSelectedDate: function(e) {
-    if (e.target.className && !e.target.className.match(/disabled/g)) {
+    var target = e.target;
+    if (target.className && !target.className.match(/disabled/g)) {
+      var month;
+      if(target.className.indexOf("new") >= 0) month = this.state.viewDate.month() + 1;
+      else if(target.className.indexOf("old") >= 0) month = this.state.viewDate.month() - 1;
+      else month = this.state.viewDate.month();
       return this.setState({
-        selectedDate: this.state.viewDate.clone().date(parseInt(e.target.innerHTML)).hour(this.state.selectedDate.hours()).minute(this.state.selectedDate.minutes())
-      }, function () {
+        selectedDate: this.state.viewDate.clone().month(month).date(parseInt(e.target.innerHTML)).hour(this.state.selectedDate.hours()).minute(this.state.selectedDate.minutes())
+      }, function() {
         this.closePicker();
         this.props.onChange(this.state.selectedDate.format(this.props.format));
         return this.setState({
-          inputValue: this.state.selectedDate.format(this.props.inputFormat)
+          inputValue: this.state.selectedDate.format(this.state.inputFormat)
         });
       });
     }
@@ -97,7 +124,7 @@ DateTimeField = React.createClass({
       this.closePicker();
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.state.inputFormat)
       });
     });
   },
@@ -108,7 +135,7 @@ DateTimeField = React.createClass({
       this.closePicker();
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.state.inputFormat)
       });
     });
   },
@@ -128,7 +155,7 @@ DateTimeField = React.createClass({
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.resolvePropsInputFormat())
       });
     });
   },
@@ -138,7 +165,7 @@ DateTimeField = React.createClass({
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.resolvePropsInputFormat())
       });
     });
   },
@@ -163,7 +190,7 @@ DateTimeField = React.createClass({
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.resolvePropsInputFormat())
       });
     });
   },
@@ -173,7 +200,7 @@ DateTimeField = React.createClass({
     }, function() {
       this.props.onChange(this.state.selectedDate.format(this.props.format));
       return this.setState({
-        inputValue: this.state.selectedDate.format(this.props.inputFormat)
+        inputValue: this.state.selectedDate.format(this.resolvePropsInputFormat())
       });
     });
   },
@@ -194,9 +221,9 @@ DateTimeField = React.createClass({
   },
   togglePeriod: function() {
     if (this.state.selectedDate.hour() > 12) {
-      return this.onChange(this.state.selectedDate.clone().subtract(12, 'hours').format(this.props.inputFormat));
+      return this.onChange(this.state.selectedDate.clone().subtract(12, 'hours').format(this.state.inputFormat));
     } else {
-      return this.onChange(this.state.selectedDate.clone().add(12, 'hours').format(this.props.inputFormat));
+      return this.onChange(this.state.selectedDate.clone().add(12, 'hours').format(this.state.inputFormat));
     }
   },
   togglePicker: function() {
@@ -281,6 +308,7 @@ DateTimeField = React.createClass({
                   showToday={this.props.showToday}
                   viewMode={this.props.viewMode}
                   daysOfWeekDisabled={this.props.daysOfWeekDisabled}
+                  mode={this.props.mode}
                   minDate={this.props.minDate}
                   maxDate={this.props.maxDate}
                   addDecade={this.addDecade}
@@ -302,8 +330,8 @@ DateTimeField = React.createClass({
                   togglePeriod={this.togglePeriod}
             />
             <div className="input-group date" ref="datetimepicker">
-              <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} onMouseDown={onMouseDown} ref="dtpbutton"><Glyphicon glyph="calendar" /></span>
-              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>
+              <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} {...this.props.inputProps}/>
+              <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} ref="dtpbutton"><Glyphicon glyph={this.state.buttonIcon} /></span>
             </div>
           </div>
     );
