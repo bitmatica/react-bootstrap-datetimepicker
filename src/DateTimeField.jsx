@@ -21,7 +21,7 @@ DateTimeField = React.createClass({
     mode: React.PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME]),
     minDate: React.PropTypes.object,
     maxDate: React.PropTypes.object,
-    buttonLeft: React.PropTypes.bool
+    buttonPlacement: React.PropTypes.oneOf([Constants.PLACEMENT_LEFT, Constants.PLACEMENT_RIGHT]),
   },
   getDefaultProps: function() {
     return {
@@ -34,7 +34,7 @@ DateTimeField = React.createClass({
       onChange: function (x) {
         console.log(x);
       },
-      buttonLeft: false
+      buttonPlacement: Constants.PLACEMENT_RIGHT
     };
   },
   getInitialState: function() {
@@ -298,10 +298,10 @@ DateTimeField = React.createClass({
   },
   renderComponents: function() {
     var elements = [
-      <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} ref="dtpbutton"><Glyphicon glyph={this.state.buttonIcon} /></span>,
-      <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>
+      <input type="text" className="form-control" onChange={this.onChange} value={this.state.inputValue} ref="dtpinput" {...this.props.inputProps}/>,
+      <span className="input-group-addon" onClick={this.onClick} onBlur={this.onBlur} ref="dtpbutton"><Glyphicon glyph={this.state.buttonIcon} /></span>
     ];
-    return (this.props.buttonLeft) ? elements : elements.reverse();
+    return (this.props.buttonPlacement === Constants.PLACEMENT_RIGHT) ? elements : elements.reverse();
   },
   render: function() {
     var onMouseDown = function(e) {e.preventDefault()};
