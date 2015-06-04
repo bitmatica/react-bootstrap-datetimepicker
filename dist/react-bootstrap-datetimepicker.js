@@ -83,7 +83,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    defaultText: React.PropTypes.string,
 	    mode: React.PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME]),
 	    minDate: React.PropTypes.object,
-	    maxDate: React.PropTypes.object
+	    maxDate: React.PropTypes.object,
+	    buttonLeft: React.PropTypes.bool
 	  },
 	  getDefaultProps: function() {
 	    return {
@@ -95,7 +96,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      mode: Constants.MODE_DATETIME,
 	      onChange: function (x) {
 	        console.log(x);
-	      }
+	      },
+	      buttonLeft: false
 	    };
 	  },
 	  getInitialState: function() {
@@ -357,6 +359,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      widgetStyle: style
 	    });
 	  },
+	  renderComponents: function() {
+	    var elements = [
+	      React.createElement("span", {className: "input-group-addon", onClick: this.onClick, onBlur: this.onBlur, ref: "dtpbutton"}, React.createElement(Glyphicon, {glyph: this.state.buttonIcon})),
+	      React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue, ref: "dtpinput"},  this.props.inputProps))
+	    ];
+	    return (this.props.buttonLeft) ? elements : elements.reverse();
+	  },
 	  render: function() {
 	    var onMouseDown = function(e) {e.preventDefault()};
 	    return (
@@ -393,8 +402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  togglePeriod: this.togglePeriod}
 	            ), 
 	            React.createElement("div", {className: "input-group date", ref: "datetimepicker"}, 
-	              React.createElement("input", React.__spread({type: "text", className: "form-control", onChange: this.onChange, value: this.state.inputValue},  this.props.inputProps)), 
-	              React.createElement("span", {className: "input-group-addon", onClick: this.onClick, onBlur: this.onBlur, ref: "dtpbutton"}, React.createElement(Glyphicon, {glyph: this.state.buttonIcon}))
+	              this.renderComponents()
 	            )
 	          )
 	    );
