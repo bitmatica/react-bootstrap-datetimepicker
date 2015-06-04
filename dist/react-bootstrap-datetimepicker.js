@@ -118,9 +118,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        left: -9999,
 	        zIndex: '9999 !important'
 	      },
-	      viewDate: moment(this.props.dateTime, this.props.format, true).startOf("month"),
-	      selectedDate: moment(this.props.dateTime, this.props.format, true),
-	      inputValue: typeof this.props.defaultText != 'undefined' ?  this.props.defaultText : moment(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
+	      viewDate: date.clone().startOf("month"),
+	      selectedDate: date,
+	      inputValue: inputText
 	    };
 	  },
 	  componentWillReceiveProps: function(nextProps) {
@@ -438,9 +438,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	React = __webpack_require__(2);
 
-	DateTimePickerDate = __webpack_require__(7);
+	DateTimePickerDate = __webpack_require__(8);
 
-	DateTimePickerTime = __webpack_require__(8);
+	DateTimePickerTime = __webpack_require__(7);
 
 	var Glyphicon = __webpack_require__(4).Glyphicon;
 
@@ -571,11 +571,137 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var DateTimePickerHours, DateTimePickerMinutes, DateTimePickerTime, Glyphicon, React;
+
+	React = __webpack_require__(2);
+
+	DateTimePickerMinutes = __webpack_require__(9);
+
+	DateTimePickerHours = __webpack_require__(10);
+
+	var Glyphicon = __webpack_require__(4).Glyphicon;
+
+	var Constants = __webpack_require__(6);
+
+	DateTimePickerTime = React.createClass({displayName: "DateTimePickerTime",
+	  propTypes: {
+	    setSelectedHour: React.PropTypes.func.isRequired,
+	    setSelectedMinute: React.PropTypes.func.isRequired,
+	    subtractHour: React.PropTypes.func.isRequired,
+	    addHour: React.PropTypes.func.isRequired,
+	    subtractMinute: React.PropTypes.func.isRequired,
+	    addMinute: React.PropTypes.func.isRequired,
+	    viewDate: React.PropTypes.object.isRequired,
+	    selectedDate: React.PropTypes.object.isRequired,
+	    togglePeriod: React.PropTypes.func.isRequired,
+	    mode: React.PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME])
+	  },
+	  getInitialState: function() {
+	    return {
+	      minutesDisplayed: false,
+	      hoursDisplayed: false
+	    };
+	  },
+	  goBack: function() {
+	    return this.setState({
+	      minutesDisplayed: false,
+	      hoursDisplayed: false
+	    });
+	  },
+	  showMinutes: function() {
+	    return this.setState({
+	      minutesDisplayed: true
+	    });
+	  },
+	  showHours: function() {
+	    return this.setState({
+	      hoursDisplayed: true
+	    });
+	  },
+	  renderMinutes: function() {
+	    if (this.state.minutesDisplayed) {
+	      return React.createElement(DateTimePickerMinutes, React.__spread({},  this.props, {onSwitch: this.goBack}));
+	    } else {
+	      return null;
+	    }
+	  },
+	  renderHours: function() {
+	    if (this.state.hoursDisplayed) {
+	      return React.createElement(DateTimePickerHours, React.__spread({},  this.props, {onSwitch: this.goBack}));
+	    } else {
+	      return null;
+	    }
+	  },
+	  renderPicker: function() {
+	    if (!this.state.minutesDisplayed && !this.state.hoursDisplayed) {
+	      return (
+	      React.createElement("div", {className: "timepicker-picker"}, 
+	        React.createElement("table", {className: "table-condensed"}, 
+	          React.createElement("tbody", null, 
+	            React.createElement("tr", null, 
+	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.addHour}, React.createElement(Glyphicon, {glyph: "chevron-up"}))), 
+
+	              React.createElement("td", {className: "separator"}), 
+
+	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.addMinute}, React.createElement(Glyphicon, {glyph: "chevron-up"}))), 
+
+	              React.createElement("td", {className: "separator"})
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", null, React.createElement("span", {className: "timepicker-hour", onClick: this.showHours}, this.props.selectedDate.format('h'))), 
+
+	              React.createElement("td", {className: "separator"}, ":"), 
+
+	              React.createElement("td", null, React.createElement("span", {className: "timepicker-minute", onClick: this.showMinutes}, this.props.selectedDate.format('mm'))), 
+
+	              React.createElement("td", {className: "separator"}), 
+
+	              React.createElement("td", null, React.createElement("button", {className: "btn btn-primary", onClick: this.props.togglePeriod, type: "button"}, this.props.selectedDate.format('A')))
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.subtractHour}, React.createElement(Glyphicon, {glyph: "chevron-down"}))), 
+
+	              React.createElement("td", {className: "separator"}), 
+
+	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.subtractMinute}, React.createElement(Glyphicon, {glyph: "chevron-down"}))), 
+
+	              React.createElement("td", {className: "separator"})
+	            )
+	          )
+	        )
+	      )
+	      );
+	    } else {
+	      return '';
+	    }
+	  },
+	  render: function() {
+	    return (
+	        React.createElement("div", {className: "timepicker"}, 
+	          this.renderPicker(), 
+
+	          this.renderHours(), 
+
+	          this.renderMinutes()
+	        )
+	    );
+	  }
+	});
+
+	module.exports = DateTimePickerTime;
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var DateTimePickerDate, DateTimePickerDays, DateTimePickerMonths, DateTimePickerYears, React;
 
 	React = __webpack_require__(2);
 
-	DateTimePickerDays = __webpack_require__(10);
+	DateTimePickerDays = __webpack_require__(11);
 
 	DateTimePickerMonths = __webpack_require__(12);
 
@@ -717,132 +843,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var DateTimePickerHours, DateTimePickerMinutes, DateTimePickerTime, Glyphicon, React;
-
-	React = __webpack_require__(2);
-
-	DateTimePickerMinutes = __webpack_require__(9);
-
-	DateTimePickerHours = __webpack_require__(11);
-
-	var Glyphicon = __webpack_require__(4).Glyphicon;
-
-	var Constants = __webpack_require__(6);
-
-	DateTimePickerTime = React.createClass({displayName: "DateTimePickerTime",
-	  propTypes: {
-	    setSelectedHour: React.PropTypes.func.isRequired,
-	    setSelectedMinute: React.PropTypes.func.isRequired,
-	    subtractHour: React.PropTypes.func.isRequired,
-	    addHour: React.PropTypes.func.isRequired,
-	    subtractMinute: React.PropTypes.func.isRequired,
-	    addMinute: React.PropTypes.func.isRequired,
-	    viewDate: React.PropTypes.object.isRequired,
-	    selectedDate: React.PropTypes.object.isRequired,
-	    togglePeriod: React.PropTypes.func.isRequired,
-	    mode: React.PropTypes.oneOf([Constants.MODE_DATE, Constants.MODE_DATETIME, Constants.MODE_TIME])
-	  },
-	  getInitialState: function() {
-	    return {
-	      minutesDisplayed: false,
-	      hoursDisplayed: false
-	    };
-	  },
-	  goBack: function() {
-	    return this.setState({
-	      minutesDisplayed: false,
-	      hoursDisplayed: false
-	    });
-	  },
-	  showMinutes: function() {
-	    return this.setState({
-	      minutesDisplayed: true
-	    });
-	  },
-	  showHours: function() {
-	    return this.setState({
-	      hoursDisplayed: true
-	    });
-	  },
-	  renderMinutes: function() {
-	    if (this.state.minutesDisplayed) {
-	      return React.createElement(DateTimePickerMinutes, React.__spread({},  this.props, {onSwitch: this.goBack}));
-	    } else {
-	      return null;
-	    }
-	  },
-	  renderHours: function() {
-	    if (this.state.hoursDisplayed) {
-	      return React.createElement(DateTimePickerHours, React.__spread({},  this.props, {onSwitch: this.goBack}));
-	    } else {
-	      return null;
-	    }
-	  },
-	  renderPicker: function() {
-	    if (!this.state.minutesDisplayed && !this.state.hoursDisplayed) {
-	      return (
-	      React.createElement("div", {className: "timepicker-picker"}, 
-	        React.createElement("table", {className: "table-condensed"}, 
-	          React.createElement("tbody", null, 
-	            React.createElement("tr", null, 
-	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.addHour}, React.createElement(Glyphicon, {glyph: "chevron-up"}))), 
-
-	              React.createElement("td", {className: "separator"}), 
-
-	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.addMinute}, React.createElement(Glyphicon, {glyph: "chevron-up"}))), 
-
-	              React.createElement("td", {className: "separator"})
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", null, React.createElement("span", {className: "timepicker-hour", onClick: this.showHours}, this.props.selectedDate.format('h'))), 
-
-	              React.createElement("td", {className: "separator"}, ":"), 
-
-	              React.createElement("td", null, React.createElement("span", {className: "timepicker-minute", onClick: this.showMinutes}, this.props.selectedDate.format('mm'))), 
-
-	              React.createElement("td", {className: "separator"}), 
-
-	              React.createElement("td", null, React.createElement("button", {className: "btn btn-primary", onClick: this.props.togglePeriod, type: "button"}, this.props.selectedDate.format('A')))
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.subtractHour}, React.createElement(Glyphicon, {glyph: "chevron-down"}))), 
-
-	              React.createElement("td", {className: "separator"}), 
-
-	              React.createElement("td", null, React.createElement("a", {className: "btn", onClick: this.props.subtractMinute}, React.createElement(Glyphicon, {glyph: "chevron-down"}))), 
-
-	              React.createElement("td", {className: "separator"})
-	            )
-	          )
-	        )
-	      )
-	      );
-	    } else {
-	      return '';
-	    }
-	  },
-	  render: function() {
-	    return (
-	        React.createElement("div", {className: "timepicker"}, 
-	          this.renderPicker(), 
-
-	          this.renderHours(), 
-
-	          this.renderMinutes()
-	        )
-	    );
-	  }
-	});
-
-	module.exports = DateTimePickerTime;
-
-
-/***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -915,6 +915,107 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DateTimePickerHours, React;
+
+	React = __webpack_require__(2);
+	var Glyphicon = __webpack_require__(4).Glyphicon;
+	var Constants = __webpack_require__(6);
+
+	DateTimePickerHours = React.createClass({displayName: "DateTimePickerHours",
+	  propTypes: {
+	    setSelectedHour: React.PropTypes.func.isRequired,
+	    onSwitch: React.PropTypes.func.isRequired
+	  },
+	  renderSwitchButton: function() {
+	    return this.props.mode === Constants.MODE_TIME ?
+	        (
+	            React.createElement("ul", {className: "list-unstyled"}, 
+	              React.createElement("li", null, 
+	                React.createElement("span", {className: "btn picker-switch", style: {width:'100%'}, onClick: this.props.onSwitch}, React.createElement(Glyphicon, {glyph: "time"}))
+	              )
+	            )
+	        ) :
+	        null;
+	  },
+	  render: function() {
+	    return (
+	      React.createElement("div", {className: "timepicker-hours", "data-action": "selectHour", style: {display: 'block'}}, 
+	        this.renderSwitchButton(), 
+	        React.createElement("table", {className: "table-condensed"}, 
+	          React.createElement("tbody", null, 
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "01"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "02"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "03"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "04")
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "05"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "06"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "07"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "08")
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "09"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "10"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "11"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "12")
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "13"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "14"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "15"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "16")
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "17"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "18"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "19"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "20")
+	            ), 
+
+	            React.createElement("tr", null, 
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "21"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "22"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "23"), 
+
+	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "24")
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = DateTimePickerHours;
+
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var DateTimePickerDays, React, moment;
@@ -1037,107 +1138,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	module.exports = DateTimePickerDays;
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var DateTimePickerHours, React;
-
-	React = __webpack_require__(2);
-	var Glyphicon = __webpack_require__(4).Glyphicon;
-	var Constants = __webpack_require__(6);
-
-	DateTimePickerHours = React.createClass({displayName: "DateTimePickerHours",
-	  propTypes: {
-	    setSelectedHour: React.PropTypes.func.isRequired,
-	    onSwitch: React.PropTypes.func.isRequired
-	  },
-	  renderSwitchButton: function() {
-	    return this.props.mode === Constants.MODE_TIME ?
-	        (
-	            React.createElement("ul", {className: "list-unstyled"}, 
-	              React.createElement("li", null, 
-	                React.createElement("span", {className: "btn picker-switch", style: {width:'100%'}, onClick: this.props.onSwitch}, React.createElement(Glyphicon, {glyph: "time"}))
-	              )
-	            )
-	        ) :
-	        null;
-	  },
-	  render: function() {
-	    return (
-	      React.createElement("div", {className: "timepicker-hours", "data-action": "selectHour", style: {display: 'block'}}, 
-	        this.renderSwitchButton(), 
-	        React.createElement("table", {className: "table-condensed"}, 
-	          React.createElement("tbody", null, 
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "01"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "02"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "03"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "04")
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "05"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "06"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "07"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "08")
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "09"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "10"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "11"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "12")
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "13"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "14"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "15"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "16")
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "17"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "18"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "19"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "20")
-	            ), 
-
-	            React.createElement("tr", null, 
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "21"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "22"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "23"), 
-
-	              React.createElement("td", {className: "hour", onClick: this.props.setSelectedHour}, "24")
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	module.exports = DateTimePickerHours;
 
 
 /***/ },
